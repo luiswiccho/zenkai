@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenkai - Login</title>
+  <link rel="stylesheet" href="avanceproyecto.css">
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="cancionkawai.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio en HTML5.
+  </audio>
+
+  <div class="contenedor-login">
+    <section class="panel-login">
+      <h1 class="titulo">Iniciar sesión</h1>
+      <p class="subtitulo">Ingrese su información para organizar su día.</p>
+      
+      <form class="formulario-login">
+        <div class="campo">
+          <label>Nombre de usuario</label>
+          <input type="text" id="login-user" placeholder="Ej: Juan Perez" spellcheck="false" required>
+        </div>
+        
+        <div class="campo">
+          <label>Contraseña</label>
+          <input type="password" id="login-pass" placeholder="••••••••" required>
+        </div>
+        
+        <a href="#" class="recuperar">¿Olvidaste tu contraseña?</a>
+        
+        <button type="button" class="btn-negro" onclick="realizarLogin()">Ingresar</button>
+      </form>
+
+      <p style="margin-top:20px; font-size:14px; text-align:center;">
+        ¿No tienes cuenta? <a href="registrar.html" style="color: #222; font-weight: bold;">Crear cuenta</a>
+      </p>
+      <p class="footer">© 2026 Zenkai Planner</p>
+    </section>
+  </div>
+
+  <script>
+    async function realizarLogin() {
+        const username = document.getElementById('login-user').value;
+        const password = document.getElementById('login-pass').value;
+
+        if (!username || !password) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("usuarioLogueado", data.username);
+                if (data.mascota) {
+                    localStorage.setItem("mascotaElegida", data.mascota);
+                }
+                
+                alert("¡Bienvenido de nuevo, " + data.username + "!");
+                window.location.href = 'planner.html'; 
+            } else {
+                alert(data.error || "Usuario o contraseña incorrectos.");
+            }
+        } catch (error) {
+            console.error("Error en el login:", error);
+            alert("No se pudo conectar con el servidor. Verifica que esté encendido.");
+        }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zenkai - Registro</title>
+  <link rel="stylesheet" href="registrar.css">
+  <style>
+
+    .lista-mascotas img {
+      cursor: pointer;
+      transition: transform 0.3s, filter 0.3s;
+      border-radius: 10px;
+      padding: 5px;
+    }
+    .lista-mascotas img.seleccionada {
+      border: 3px solid #FFB300;
+      transform: scale(1.1);
+      background-color: rgba(255, 179, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor-login">
+    <section class="panel-form">
+      <h1 class="titulo">Crear cuenta</h1>
+      <p class="subtitulo">Conéctate con tu mascota y organiza tu planner</p>
+
+      <form class="formulario-facebook">
+        <div class="fila">
+          <div class="campo">
+            <label>Nombre</label>
+            <input type="text" id="reg-nombre" placeholder="Nombre" required>
+          </div>
+          <div class="campo">
+            <label>Apellido</label>
+            <input type="text" id="reg-apellido" placeholder="Apellido" required>
+          </div>
+        </div>
+
+        <div class="fila">
+          <div class="campo">
+            <label>Fecha de nacimiento</label>
+            <input type="date" required>
+          </div>
+          <div class="campo">
+            <label>Género</label>
+            <select required>
+              <option value="">Selecciona tu género</option>
+              <option>Femenino</option>
+              <option>Masculino</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="campo">
+          <label>Correo electrónico</label>
+          <input type="email" id="reg-email" placeholder="Correo electrónico" required>
+        </div>
+
+        <div class="fila">
+          <div class="campo">
+            <label>Contraseña</label>
+            <input type="password" id="reg-pass" placeholder="Contraseña" required>
+          </div>
+          <div class="campo">
+            <label>Confirmar contraseña</label>
+            <input type="password" id="reg-confirm" placeholder="Confirmar contraseña" required>
+          </div>
+        </div>
+
+        <button type="button" class="btn-negro" onclick="enviarRegistro()">Registrar</button>
+      </form>
+    </section>
+
+    <section class="panel-mascotas">
+      <h2>Elija su mascota</h2>
+      <p class="subtitulo">Seleccione una mascota para su perfil</p>
+      <div class="lista-mascotas">
+        <img src="IMG_0003.gif" alt="cupcake" class="cupcake">
+        <img src="gato.png" alt="gato" class="gatoo">
+      </div>
+    </section>
+  </div>
+
+  <script>
+
+    document.querySelectorAll('.lista-mascotas img').forEach(img => {
+      img.addEventListener('click', () => {
+
+        document.querySelectorAll('.lista-mascotas img').forEach(i => i.classList.remove('seleccionada'));
+
+        img.classList.add('seleccionada');
+
+        const eleccion = img.classList.contains("cupcake") ? "cupcake" : "gato";
+        localStorage.setItem("mascotaElegida", eleccion);
+        console.log("Mascota guardada:", eleccion);
+      });
+    });
+
+    async function enviarRegistro() {
+        const nombre = document.getElementById('reg-nombre').value;
+        const apellido = document.getElementById('reg-apellido').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-pass').value;
+        const confirmPassword = document.getElementById('reg-confirm').value;
+        const mascota = localStorage.getItem("mascotaElegida") || "gato";
+
+        if (!nombre || !apellido || !email || !password) {
+            alert("Por favor, llena todos los campos obligatorios.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Las contraseñas no coinciden.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/registrar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    username: `${nombre} ${apellido}`,
+                    email: email, 
+                    password: password, 
+                    mascota: mascota 
+                })
+            });
+
+            if (response.ok) {
+                alert("¡Registro exitoso! Revisa tu correo de bienvenida.");
+                window.location.href = 'login.html';
+            } else {
+                const data = await response.json();
+                alert("Error al registrar: " + (data.error || "Intenta de nuevo"));
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("No se pudo conectar con el servidor.");
+        }
+    }
+  </script>
+
+</body>
+</html>

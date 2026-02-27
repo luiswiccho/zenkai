@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Planner Pomodoro</title>
+  <link rel="stylesheet" href="yesss.css">
+</head>
+<body>
+  <div id="planner-root">
+    <nav class="top-nav">
+      <div class="nav-item active" onclick="showSection('home')">HOME / CALENDAR</div>
+      <div class="nav-item" onclick="showSection('timer')">TIMER</div>
+    </nav>
+    
+    <div id="home-section" class="container">
+      <main class="left-panel">
+        <div class="calendar-header">
+          <button id="prevMonth">◀</button>
+          <h1 id="monthDisplay">JANUARY</h1>
+          <button id="nextMonth">▶</button>
+        </div>
+        <table class="calendar">
+          <thead>
+            <tr>
+              <th>LUN</th><th>MAR</th><th>MIE</th><th>JUE</th>
+              <th>VIE</th><th>SAB</th><th>DOM</th>
+            </tr>
+          </thead>
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </main>
+
+      <div id="taskModal" class="modal">
+        <div class="modal-content">
+          <h3>Registrar tarea</h3>
+          <p id="selectedDate"></p>
+          <input type="text" id="taskTitle" placeholder="Título de la tarea">
+          <input type="time" id="taskTime">
+          <button onclick="saveTask()">Guardar</button>
+          <button onclick="closeModal()">Cancelar</button>
+        </div>
+      </div>
+
+      <aside class="right-panel">
+        <div class="avatar-box"><img id="main-avatar"></div>
+
+        <section class="list-section">
+          <div class="header-with-buttons">
+            <h3>METAS DEL MES</h3>
+            <div class="controls">
+              <button onclick="addItem('goalsContainer')">+</button>
+              <button onclick="removeItem('goalsContainer')">-</button>
+            </div>
+          </div>
+          <div class="list-container" id="goalsContainer"></div>
+        </section>
+
+        <section class="list-section">
+          <h3>TAREAS DEL DIA</h3>
+          <button onclick="openTaskModal()">+ Nueva tarea</button>
+          <div id="dayTasks"></div>
+        </section>
+      </aside>
+    </div>
+
+    <div id="timer-section" class="container" style="display: none; flex-direction: column; align-items: center;">
+      <div class="timer-menu">
+        <select id="timerType" onchange="resetTimer()">
+          <option value="25">POMODORO 25/5</option>
+          <option value="18">TECNICA 18/2</option>
+          <option value="50">FLOW TIME 50/10</option>
+        </select>
+      </div>
+
+      <div class="timer-display" id="time">25:00</div>
+      
+      <div class="progress-wrapper">
+        <div class="progress-bar">
+          <img id="walking-avatar">
+          <div id="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="timer-controls">
+        <button id="startPauseBtn" onclick="toggleTimer()">PLAY</button>
+        <button onclick="resetTimer()">RESET</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="ea.js"></script>
+</body>
+</html>
