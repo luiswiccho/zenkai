@@ -29,7 +29,7 @@ body {
 }
 
 .panel-login {
-  background: #fff;
+  background: #B9D9EB;
   border-radius: 12px;
   padding: 40px;
   max-width: 400px;
@@ -212,5 +212,6 @@ body {
     height: 120px;
   }
 }
+
 
 
