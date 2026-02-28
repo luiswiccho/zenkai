@@ -226,8 +226,8 @@ function cargarConfiguracionUsuario() {
         imgWalking.src = "IMG_0003.gif";
     } else {
         plannerRoot.classList.remove("cupcake-theme");
-        imgAvatar.src = "gateteRespirando.gif";
-        imgWalking.src = "gateteRespirando.gif";
+        imgAvatar.src = "gateteRespirando2.gif";
+        imgWalking.src = "gateteRespirando2.gif";
     }
 }
 
@@ -285,4 +285,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('prevMonth').onclick = () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); };
     document.getElementById('nextMonth').onclick = () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); };
+
 });
